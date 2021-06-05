@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ptg.ptgchannelimpl.mapper.ClHttpParamConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.ptg.channel.po.ClHttpParamConfig" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="HTTP_PARAM_ID" property="httpParamId" jdbcType="VARCHAR" />
+    <result column="HTTP_PARAM_NAME" property="httpParamName" jdbcType="VARCHAR" />
+    <result column="HTTP_PARAM_VALUE" property="httpParamValue" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, HTTP_PARAM_ID, HTTP_PARAM_NAME, HTTP_PARAM_VALUE, DEL_FLAG, CREATE_DATE, UPDATE_DATE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ptg.channel.po.ClHttpParamConfigExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from CL_HTTP_PARAM_CONFIG
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from CL_HTTP_PARAM_CONFIG
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from CL_HTTP_PARAM_CONFIG
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ptg.channel.po.ClHttpParamConfigExample" >
+    delete from CL_HTTP_PARAM_CONFIG
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ptg.channel.po.ClHttpParamConfig" >
+    insert into CL_HTTP_PARAM_CONFIG (ID, HTTP_PARAM_ID, HTTP_PARAM_NAME, 
+      HTTP_PARAM_VALUE, DEL_FLAG, CREATE_DATE, 
+      UPDATE_DATE)
+    values (#{id,jdbcType=VARCHAR}, #{httpParamId,jdbcType=VARCHAR}, #{httpParamName,jdbcType=VARCHAR}, 
+      #{httpParamValue,jdbcType=VARCHAR}, #{delFlag,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ptg.channel.po.ClHttpParamConfig" >
+    insert into CL_HTTP_PARAM_CONFIG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="httpParamId != null" >
+        HTTP_PARAM_ID,
+      </if>
+      <if test="httpParamName != null" >
+        HTTP_PARAM_NAME,
+      </if>
+      <if test="httpParamValue != null" >
+        HTTP_PARAM_VALUE,
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="httpParamId != null" >
+        #{httpParamId,jdbcType=VARCHAR},
+      </if>
+      <if test="httpParamName != null" >
+        #{httpParamName,jdbcType=VARCHAR},
+      </if>
+      <if test="httpParamValue != null" >
+        #{httpParamValue,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ptg.channel.po.ClHttpParamConfigExample" resultType="java.lang.Integer" >
+    select count(*) from CL_HTTP_PARAM_CONFIG
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update CL_HTTP_PARAM_CONFIG
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.httpParamId != null" >
+        HTTP_PARAM_ID = #{record.httpParamId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.httpParamName != null" >
+        HTTP_PARAM_NAME = #{record.httpParamName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.httpParamValue != null" >
+        HTTP_PARAM_VALUE = #{record.httpParamValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlag != null" >
+        DEL_FLAG = #{record.delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null" >
+        CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateDate != null" >
+        UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update CL_HTTP_PARAM_CONFIG
+    set ID = #{record.id,jdbcType=VARCHAR},
+      HTTP_PARAM_ID = #{record.httpParamId,jdbcType=VARCHAR},
+      HTTP_PARAM_NAME = #{record.httpParamName,jdbcType=VARCHAR},
+      HTTP_PARAM_VALUE = #{record.httpParamValue,jdbcType=VARCHAR},
+      DEL_FLAG = #{record.delFlag,jdbcType=VARCHAR},
+      CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
+      UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ptg.channel.po.ClHttpParamConfig" >
+    update CL_HTTP_PARAM_CONFIG
+    <set >
+      <if test="httpParamId != null" >
+        HTTP_PARAM_ID = #{httpParamId,jdbcType=VARCHAR},
+      </if>
+      <if test="httpParamName != null" >
+        HTTP_PARAM_NAME = #{httpParamName,jdbcType=VARCHAR},
+      </if>
+      <if test="httpParamValue != null" >
+        HTTP_PARAM_VALUE = #{httpParamValue,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ptg.channel.po.ClHttpParamConfig" >
+    update CL_HTTP_PARAM_CONFIG
+    set HTTP_PARAM_ID = #{httpParamId,jdbcType=VARCHAR},
+      HTTP_PARAM_NAME = #{httpParamName,jdbcType=VARCHAR},
+      HTTP_PARAM_VALUE = #{httpParamValue,jdbcType=VARCHAR},
+      DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="queryHttpParams" parameterType="String" resultType="com.ptg.channel.dto.channel.ChannelHttpParamConfig">
+    SELECT
+    HTTP_PARAM_NAME AS httpParamName,
+    HTTP_PARAM_VALUE AS httpParamValue
+    FROM CL_HTTP_PARAM_CONFIG
+    WHERE 1=1 AND HTTP_PARAM_ID = #{httpParamId} AND DEL_FLAG='1'
+  </select>
+</mapper>

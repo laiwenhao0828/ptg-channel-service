@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ptg.ptgchannelimpl.mapper.ClChannelInterfaceConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.ptg.channel.po.ClChannelInterfaceConfig" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="INTERFACE_NAME" property="interfaceName" jdbcType="VARCHAR" />
+    <result column="HTTP_ID" property="httpId" jdbcType="VARCHAR" />
+    <result column="TEMPLATE_REQ" property="templateReq" jdbcType="VARCHAR" />
+    <result column="TEMPLATE_RESP" property="templateResp" jdbcType="VARCHAR" />
+    <result column="PUB_KEY_ID" property="pubKeyId" jdbcType="VARCHAR" />
+    <result column="PRI_KEY_ID" property="priKeyId" jdbcType="VARCHAR" />
+    <result column="ENCRY_FILTER" property="encryFilter" jdbcType="VARCHAR" />
+    <result column="IS_TEST" property="isTest" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, INTERFACE_NAME, HTTP_ID, TEMPLATE_REQ, TEMPLATE_RESP, PUB_KEY_ID, PRI_KEY_ID, 
+    ENCRY_FILTER, IS_TEST, DEL_FLAG, CREATE_DATE, UPDATE_DATE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ptg.channel.po.ClChannelInterfaceConfigExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from CL_CHANNEL_INTERFACE_CONFIG
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from CL_CHANNEL_INTERFACE_CONFIG
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from CL_CHANNEL_INTERFACE_CONFIG
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ptg.channel.po.ClChannelInterfaceConfigExample" >
+    delete from CL_CHANNEL_INTERFACE_CONFIG
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ptg.channel.po.ClChannelInterfaceConfig" >
+    insert into CL_CHANNEL_INTERFACE_CONFIG (ID, INTERFACE_NAME, HTTP_ID, 
+      TEMPLATE_REQ, TEMPLATE_RESP, PUB_KEY_ID, 
+      PRI_KEY_ID, ENCRY_FILTER, IS_TEST, 
+      DEL_FLAG, CREATE_DATE, UPDATE_DATE
+      )
+    values (#{id,jdbcType=VARCHAR}, #{interfaceName,jdbcType=VARCHAR}, #{httpId,jdbcType=VARCHAR}, 
+      #{templateReq,jdbcType=VARCHAR}, #{templateResp,jdbcType=VARCHAR}, #{pubKeyId,jdbcType=VARCHAR}, 
+      #{priKeyId,jdbcType=VARCHAR}, #{encryFilter,jdbcType=VARCHAR}, #{isTest,jdbcType=VARCHAR}, 
+      #{delFlag,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ptg.channel.po.ClChannelInterfaceConfig" >
+    insert into CL_CHANNEL_INTERFACE_CONFIG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="interfaceName != null" >
+        INTERFACE_NAME,
+      </if>
+      <if test="httpId != null" >
+        HTTP_ID,
+      </if>
+      <if test="templateReq != null" >
+        TEMPLATE_REQ,
+      </if>
+      <if test="templateResp != null" >
+        TEMPLATE_RESP,
+      </if>
+      <if test="pubKeyId != null" >
+        PUB_KEY_ID,
+      </if>
+      <if test="priKeyId != null" >
+        PRI_KEY_ID,
+      </if>
+      <if test="encryFilter != null" >
+        ENCRY_FILTER,
+      </if>
+      <if test="isTest != null" >
+        IS_TEST,
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaceName != null" >
+        #{interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="httpId != null" >
+        #{httpId,jdbcType=VARCHAR},
+      </if>
+      <if test="templateReq != null" >
+        #{templateReq,jdbcType=VARCHAR},
+      </if>
+      <if test="templateResp != null" >
+        #{templateResp,jdbcType=VARCHAR},
+      </if>
+      <if test="pubKeyId != null" >
+        #{pubKeyId,jdbcType=VARCHAR},
+      </if>
+      <if test="priKeyId != null" >
+        #{priKeyId,jdbcType=VARCHAR},
+      </if>
+      <if test="encryFilter != null" >
+        #{encryFilter,jdbcType=VARCHAR},
+      </if>
+      <if test="isTest != null" >
+        #{isTest,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ptg.channel.po.ClChannelInterfaceConfigExample" resultType="java.lang.Integer" >
+    select count(*) from CL_CHANNEL_INTERFACE_CONFIG
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update CL_CHANNEL_INTERFACE_CONFIG
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.interfaceName != null" >
+        INTERFACE_NAME = #{record.interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.httpId != null" >
+        HTTP_ID = #{record.httpId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.templateReq != null" >
+        TEMPLATE_REQ = #{record.templateReq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.templateResp != null" >
+        TEMPLATE_RESP = #{record.templateResp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pubKeyId != null" >
+        PUB_KEY_ID = #{record.pubKeyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.priKeyId != null" >
+        PRI_KEY_ID = #{record.priKeyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.encryFilter != null" >
+        ENCRY_FILTER = #{record.encryFilter,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isTest != null" >
+        IS_TEST = #{record.isTest,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlag != null" >
+        DEL_FLAG = #{record.delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null" >
+        CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateDate != null" >
+        UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update CL_CHANNEL_INTERFACE_CONFIG
+    set ID = #{record.id,jdbcType=VARCHAR},
+      INTERFACE_NAME = #{record.interfaceName,jdbcType=VARCHAR},
+      HTTP_ID = #{record.httpId,jdbcType=VARCHAR},
+      TEMPLATE_REQ = #{record.templateReq,jdbcType=VARCHAR},
+      TEMPLATE_RESP = #{record.templateResp,jdbcType=VARCHAR},
+      PUB_KEY_ID = #{record.pubKeyId,jdbcType=VARCHAR},
+      PRI_KEY_ID = #{record.priKeyId,jdbcType=VARCHAR},
+      ENCRY_FILTER = #{record.encryFilter,jdbcType=VARCHAR},
+      IS_TEST = #{record.isTest,jdbcType=VARCHAR},
+      DEL_FLAG = #{record.delFlag,jdbcType=VARCHAR},
+      CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
+      UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ptg.channel.po.ClChannelInterfaceConfig" >
+    update CL_CHANNEL_INTERFACE_CONFIG
+    <set >
+      <if test="interfaceName != null" >
+        INTERFACE_NAME = #{interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="httpId != null" >
+        HTTP_ID = #{httpId,jdbcType=VARCHAR},
+      </if>
+      <if test="templateReq != null" >
+        TEMPLATE_REQ = #{templateReq,jdbcType=VARCHAR},
+      </if>
+      <if test="templateResp != null" >
+        TEMPLATE_RESP = #{templateResp,jdbcType=VARCHAR},
+      </if>
+      <if test="pubKeyId != null" >
+        PUB_KEY_ID = #{pubKeyId,jdbcType=VARCHAR},
+      </if>
+      <if test="priKeyId != null" >
+        PRI_KEY_ID = #{priKeyId,jdbcType=VARCHAR},
+      </if>
+      <if test="encryFilter != null" >
+        ENCRY_FILTER = #{encryFilter,jdbcType=VARCHAR},
+      </if>
+      <if test="isTest != null" >
+        IS_TEST = #{isTest,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ptg.channel.po.ClChannelInterfaceConfig" >
+    update CL_CHANNEL_INTERFACE_CONFIG
+    set INTERFACE_NAME = #{interfaceName,jdbcType=VARCHAR},
+      HTTP_ID = #{httpId,jdbcType=VARCHAR},
+      TEMPLATE_REQ = #{templateReq,jdbcType=VARCHAR},
+      TEMPLATE_RESP = #{templateResp,jdbcType=VARCHAR},
+      PUB_KEY_ID = #{pubKeyId,jdbcType=VARCHAR},
+      PRI_KEY_ID = #{priKeyId,jdbcType=VARCHAR},
+      ENCRY_FILTER = #{encryFilter,jdbcType=VARCHAR},
+      IS_TEST = #{isTest,jdbcType=VARCHAR},
+      DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="queryConfigByInterfaceName" parameterType="String" resultType="com.ptg.channel.req.ChannelParamConfig">
+    select
+    ccic.INTERFACE_NAME AS interfaceName,
+    ccic.TEMPLATE_REQ AS templateReq,
+    ccic.TEMPLATE_RESP AS templateResp,
+    ccic.PUB_KEY_ID AS pubKeyId,
+    ccic.PRI_KEY_ID AS priKeyId,
+    ccic.ENCRY_FILTER AS encryFilter,
+    ccic.IS_TEST AS isTest,
+    chc.HTTP_HOST AS httpHost,
+    chc.HTTP_PARAM_ID AS httpParamId,
+    chc.HTTP_METHOD AS httpMethod
+    from CL_CHANNEL_INTERFACE_CONFIG ccic
+    LEFT JOIN CL_HTTP_CONFIG chc on CCIC.HTTP_ID=chc.HTTP_ID
+    where 1=1 and ccic.INTERFACE_NAME=#{interfaceName} AND ccic.DEL_FLAG='1' AND chc.DEL_FLAG='1'
+  </select>
+</mapper>
