@@ -336,4 +336,15 @@
     LEFT JOIN CL_HTTP_CONFIG chc on CCIC.HTTP_ID=chc.HTTP_ID
     where 1=1 and ccic.INTERFACE_NAME=#{interfaceName} AND ccic.DEL_FLAG='1' AND chc.DEL_FLAG='1'
   </select>
+  <select id="queryChannelRespConfig" parameterType="String" resultType="com.dhgate.channel.dto.channel.ChannelRespConfig">
+    select
+    cccc.CHANNEL_CODE_KEY,
+    cccc.CODE_KEY,
+    ccvc.CHANNEL_CODE_VALUE,
+    ccvc.CODE_VALUE
+    from CL_CHANNEL_INTERFACE_CONFIG ccic
+    LEFT JOIN CL_CHANNEL_CODEKEY_CONFIG cccc on ccic.CODE_KEY_ID=cccc.CODE_KEY_ID
+    LEFT JOIN CL_CHANNEL_CODEVALUE_CONFIG ccvc on cccc.CODE_VALUE_ID=ccvc.CODE_VALUE_ID
+    where 1=1 and ccic.INTERFACE_NAME=#{interfaceName} and ccic.DEL_FLAG='1' and cccc.DEL_FLAG='1' and ccvc.DEL_FLAG='1'
+  </select>
 </mapper>

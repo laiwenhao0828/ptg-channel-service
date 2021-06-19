@@ -7,6 +7,7 @@ import com.ptg.channel.req.ChannelHttpParamConfig;
 import com.ptg.channel.req.ChannelParamConfig;
 import com.ptg.channel.req.ChannelSecretReq;
 import com.ptg.channel.resp.BaseResp;
+import com.ptg.channel.resp.ChannelRespConfig;
 import com.ptg.ptgchannelimpl.exception.GatewayException;
 import com.ptg.ptgchannelimpl.mapper.ClChannelInterfaceConfigMapper;
 import com.ptg.ptgchannelimpl.mapper.ClChannelSecretConfigMapper;
@@ -21,9 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author xch
@@ -71,6 +71,25 @@ public class ChannelProcessServiceImpl implements ChannelProcessService {
                 }
             }
 
+        });
+    }
+
+    @Override
+    public BaseResp<String> getChannelReq(String templateReq, Map<String, Object> paramMap) {
+        return ServiceTemplate.service(() -> {
+            Map map = JSON.parseObject(templateReq, Map.class);
+            for (Object key : map.keySet()) {
+                String value = map.get(key).toString();
+                if (value.startsWith(Constants.SPECIAL_FLAG) && value.endsWith(Constants.SPECIAL_FLAG)) {
+                    String paramMapKey = value.replaceAll("\\$", "");
+                    if (!paramMap.containsKey(paramMapKey)) {
+                        return BaseResp.error("传递的参数未有该[" + paramMapKey + "]的value值");
+                    } else {
+                        map.put(key, paramMap.get(paramMapKey));
+                    }
+                }
+            }
+            return BaseResp.success(JSON.toJSONString(map));
         });
     }
 
@@ -167,6 +186,41 @@ public class ChannelProcessServiceImpl implements ChannelProcessService {
                 log.error("ChannelProcessServiceImpl.getPlaintext error:", e);
             }
             return BaseResp.error("获取明文失败");
+        });
+    }
+
+    @Override
+    public BaseResp<Map<String, Object>> getObject(String plaintext, String interfaceName) {
+        return ServiceTemplate.service(() -> {
+            List<ChannelRespConfig> channelRespConfigList = clChannelInterfaceConfigMapper.queryChannelRespConfig(interfaceName);
+            Map channelMap = JSON.parseObject(plaintext, Map.class);
+            if (null == channelRespConfigList || channelRespConfigList.isEmpty()) {
+                return BaseResp.success(channelMap);
+            } else {
+                Map<String, Object> respMap = new HashMap<>(channelMap.keySet().size());
+                Map<String, List<ChannelRespConfig>> ChannelRespConfigListGroup = channelRespConfigList.stream().collect(Collectors.groupingBy(ChannelRespConfig::getChannelCodeKey));
+                List<String> channelCodeKeyConfigList = new ArrayList<>();
+                for (String key : ChannelRespConfigListGroup.keySet()) {
+                    channelCodeKeyConfigList.add(key);
+                    List<ChannelRespConfig> channelRespConfigs = ChannelRespConfigListGroup.get(key);
+                    String codeKey = channelRespConfigs.get(0).getCodeKey();//驼驼的key
+                    for (ChannelRespConfig channelRespConfig : channelRespConfigs) {
+                        if (!StringUtils.isEmpty(channelRespConfig.getChannelCodeValue()) && !StringUtils.isEmpty(channelRespConfig.getCodeValue())) {
+                            if (String.valueOf(channelMap.get(key)).equals(channelRespConfig.getChannelCodeValue())) {
+                                respMap.put(codeKey, channelRespConfig.getCodeValue());
+                            }
+                        }else{
+                            respMap.put(codeKey, channelMap.get(key));
+                        }
+                    }
+                }
+                for(Object key : channelMap.keySet()){
+                    if(!channelCodeKeyConfigList.contains(key)){
+                        respMap.put(String.valueOf(key),channelMap.get(key));
+                    }
+                }
+                return BaseResp.success(respMap);
+            }
         });
     }
 }

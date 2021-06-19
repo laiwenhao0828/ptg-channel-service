@@ -4,6 +4,7 @@ package com.ptg.ptgchannelimpl.mapper;
 import com.ptg.channel.po.ClChannelInterfaceConfig;
 import com.ptg.channel.po.ClChannelInterfaceConfigExample;
 import com.ptg.channel.req.ChannelParamConfig;
+import com.ptg.channel.resp.ChannelRespConfig;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -31,4 +32,8 @@ public interface ClChannelInterfaceConfigMapper {
     int updateByPrimaryKey(ClChannelInterfaceConfig record);
 
     ChannelParamConfig queryConfigByInterfaceName(@Param("interfaceName") String interfaceName);
+    /**
+     * 查询通道返回配置
+     * */
+    List<ChannelRespConfig> queryChannelRespConfig(String interfaceName);
 }

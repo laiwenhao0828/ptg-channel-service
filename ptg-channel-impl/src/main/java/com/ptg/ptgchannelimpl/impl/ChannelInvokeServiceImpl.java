@@ -6,11 +6,13 @@ import com.ptg.channel.req.ChannelParamConfig;
 import com.ptg.channel.req.ChannelSecretReq;
 import com.ptg.channel.resp.BaseResp;
 import com.ptg.channel.resp.RespCodeEnum;
-import com.ptg.ptgchannelimpl.annotation.ChannelReqLog;
 import com.ptg.ptgchannelimpl.common.ChannelProcessService;
 import com.ptg.ptgchannelimpl.util.ServiceTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /**
  * @Author xch
@@ -19,37 +21,43 @@ import org.springframework.stereotype.Service;
  **/
 
 @Service(value = "channelInvokeService")
+@Slf4j
 public class ChannelInvokeServiceImpl implements ChannelInvokeService {
     @Autowired
     private ChannelProcessService channelProcessService;
-    @ChannelReqLog(channelType="01",channelDesc = "通道对接")
     @Override
-    public BaseResp<String> invoke(String interfaceName, String params) {
+    public BaseResp<Map<String,Object>> invoke(String interfaceName, Map<String,Object> paramMap) {
         return ServiceTemplate.service(() -> {
             BaseResp<ChannelParamConfig> interfaceConfig = channelProcessService.getInterfaceConfig(interfaceName);
             if(!RespCodeEnum.SUCC.getCode().equals(interfaceConfig.getCode())){
                 return BaseResp.error(interfaceConfig.getMessage());
             }else{
                 ChannelParamConfig channelParamConfig = interfaceConfig.getData();
-                BaseResp ciphertext = channelProcessService.getCiphertext(params, channelParamConfig);
-                if(!RespCodeEnum.SUCC.getMessage().equals(ciphertext.getMessage())){
-                    return BaseResp.error(ciphertext.getMessage());
+                BaseResp<String> channelReqBaseResp = channelProcessService.getChannelReq(channelParamConfig.getTemplateReq(), paramMap);
+                if(!RespCodeEnum.SUCC.getCode().equals(channelReqBaseResp.getCode())){
+                    return BaseResp.error(channelReqBaseResp.getMessage());
                 }else{
-                    ChannelSecretReq channelSecretReq = JSON.parseObject(JSON.toJSONString(ciphertext.getData()), ChannelSecretReq.class);
-                    BaseResp baseResp = channelProcessService.handleParam(channelSecretReq, channelParamConfig);
-                    if(!RespCodeEnum.SUCC.getCode().equals(baseResp.getCode())){
-                        return BaseResp.error(baseResp.getMessage());
+                    String params = channelReqBaseResp.getData();
+                    BaseResp ciphertext = channelProcessService.getCiphertext(params, channelParamConfig);
+                    if(!RespCodeEnum.SUCC.getMessage().equals(ciphertext.getMessage())){
+                        return BaseResp.error(ciphertext.getMessage());
                     }else{
-                        BaseResp<String> httpInvoke = channelProcessService.httpInvoke(channelParamConfig);
-                        if(!RespCodeEnum.SUCC.getCode().equals(httpInvoke.getCode())){
-                            return BaseResp.error(httpInvoke.getMessage());
+                        ChannelSecretReq channelSecretReq = JSON.parseObject(JSON.toJSONString(ciphertext.getData()), ChannelSecretReq.class);
+                        BaseResp baseResp = channelProcessService.handleParam(channelSecretReq, channelParamConfig);
+                        if(!RespCodeEnum.SUCC.getCode().equals(baseResp.getCode())){
+                            return BaseResp.error(baseResp.getMessage());
                         }else{
-                            String ciphertextChannelResp = httpInvoke.getData() + "";
-                            BaseResp<String> plaintext = channelProcessService.getPlaintext(ciphertextChannelResp, channelParamConfig);
-                            if(!RespCodeEnum.SUCC.getMessage().equals(plaintext.getMessage())){
-                                return BaseResp.error(plaintext.getMessage());
+                            BaseResp<String> httpInvoke = channelProcessService.httpInvoke(channelParamConfig);
+                            if(!RespCodeEnum.SUCC.getCode().equals(httpInvoke.getCode())){
+                                return BaseResp.error(httpInvoke.getMessage());
                             }else{
-                                return BaseResp.success(plaintext.getData());
+                                String ciphertextChannelResp = httpInvoke.getData() + "";
+                                BaseResp<String> plaintext = channelProcessService.getPlaintext(ciphertextChannelResp, channelParamConfig);
+                                if(!RespCodeEnum.SUCC.getMessage().equals(plaintext.getMessage())){
+                                    return BaseResp.error(plaintext.getMessage());
+                                }else{
+                                    return channelProcessService.getObject(plaintext.getData(), channelParamConfig.getInterfaceName());
+                                }
                             }
                         }
                     }

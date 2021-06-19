@@ -20,5 +20,6 @@ public class Constants {
     public static final String SIGN_FALG = "$sign$";//签名标识
     public static final String HTTP_HEAD_FALG = "$head$";//头部标识
     public static final String IS_TEST_FLAG = "2";//2测试模式返回挡板信息
+    public static final String SPECIAL_FLAG = "$";//特殊标志符
 }
 
