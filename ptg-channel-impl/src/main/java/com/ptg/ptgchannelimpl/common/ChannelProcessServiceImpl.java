@@ -189,6 +189,7 @@ public class ChannelProcessServiceImpl implements ChannelProcessService {
         });
     }
 
+    
     @Override
     public BaseResp<Map<String, Object>> getObject(String plaintext, String interfaceName) {
         return ServiceTemplate.service(() -> {
